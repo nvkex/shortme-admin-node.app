@@ -5,6 +5,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const admin = require('firebase-admin');
 const {nanoid} = require('nanoid');
+const verifyToken = require('./verifyToken');
 
 const app = express();
 dotenv.config();
@@ -51,7 +52,7 @@ app.use('/login', async (req, res) => {
             {_id:userData._id},
             process.env.TOKEN_SECRET
         );
-        res.header('auth-token', token).send(token);
+        res.header('auth-token', token).send();
 
     });
 
@@ -77,6 +78,14 @@ app.use('/asdfghjkl/zxcvbnm/reg/admin',async (req, res) => {
         res.json(snapshot.val().admins);
     });
     
+});
+
+
+// View URLS
+app.use('/urls', verifyToken, (req,res) => {
+    ref.once("value", (snapshot) => {
+        res.json(snapshot.val().urls);
+    });
 });
 
 
