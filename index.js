@@ -42,17 +42,19 @@ app.use('/login', async (req, res) => {
             });
         }
 
-        bcrypt.compare(pass, userData.password, (err,bres) => {
-            if(!bres){
-                res.json({error:"wrong username or password"});
-            }
-        });
-
-        const token = jwt.sign(
-            {_id:userData._id},
-            process.env.TOKEN_SECRET
-        );
-        res.header('auth-token', token).send();
+        else{
+            bcrypt.compare(pass, userData.password, (err,bres) => {
+                if(!bres){
+                    res.json({error:"wrong username or password"});
+                }
+            });
+    
+            const token = jwt.sign(
+                {_id:userData._id},
+                process.env.TOKEN_SECRET
+            );
+            res.header('auth-token', token).send();
+        }
 
     });
 
